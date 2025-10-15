@@ -27,7 +27,21 @@
 #include "rcutils/types/rcutils_ret.h"
 #include "rcutils/types/string_array.h"
 
-#include "./mocking_utils/patch.hpp"
+#include "rules_cc/cc/runfiles/runfiles.h"
+
+using rules_cc::cc::runfiles::Runfiles;
+
+std::optional<std::string> get_test_asset_path(const std::string & filename) {
+  const std::string test_workspace =
+    strcmp(BAZEL_CURRENT_REPOSITORY, "") == 0 ? "_main" : BAZEL_CURRENT_REPOSITORY;
+  std::string error;
+  std::unique_ptr<Runfiles> runfiles(
+    Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error));
+  if (!runfiles) {
+    return std::nullopt;
+  }
+  return runfiles->Rlocation(test_workspace + "/test/" + filename);
+}
 
 TEST(TestParse, parse_value) {
   rcutils_allocator_t allocator = rcutils_get_default_allocator();
@@ -457,74 +471,4 @@ TEST(TestParse, parse_key_bad_args)
     rcutils_get_error_string().str;
   EXPECT_TRUE(rcutils_error_is_set());
   rcutils_reset_error();
-}
-
-TEST(TestParse, parse_file_events_mock_yaml_parser_parse) {
-  char cur_dir[1024];
-  rcutils_reset_error();
-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
-
-  rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  char * test_path = rcutils_join_path(cur_dir, "test", allocator);
-  char * path = rcutils_join_path(test_path, "correct_config.yaml", allocator);
-  ASSERT_TRUE(NULL != path) << rcutils_get_error_string().str;
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    allocator.deallocate(test_path, allocator.state);
-    allocator.deallocate(path, allocator.state);
-  });
-
-  rcl_params_t * params_hdl = rcl_yaml_node_struct_init(allocator);
-  ASSERT_NE(nullptr, params_hdl);
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    rcl_yaml_node_struct_fini(params_hdl);
-  });
-
-  yaml_parser_t parser;
-  ASSERT_NE(0, yaml_parser_initialize(&parser));
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    yaml_parser_delete(&parser);
-  });
-
-  FILE * yaml_file = fopen(path, "r");
-  ASSERT_NE(nullptr, yaml_file);
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    fclose(yaml_file);
-  });
-  yaml_parser_set_input_file(&parser, yaml_file);
-
-  namespace_tracker_t ns_tracker;
-  memset(&ns_tracker, 0, sizeof(namespace_tracker_t));
-
-  auto mock = mocking_utils::patch(
-    "lib:rcl_yaml_param_parser", yaml_parser_parse, [](yaml_parser_t *, yaml_event_t * event) {
-      event->start_mark.line = 0u;
-      event->type = YAML_NO_EVENT;
-      return 1;
-    });
-  EXPECT_EQ(RCUTILS_RET_ERROR, parse_file_events(&parser, &ns_tracker, params_hdl));
-}
-
-TEST(TestParse, parse_value_events_mock_yaml_parser_parse) {
-  constexpr char node_name[] = "node name";
-  constexpr char param_name[] = "param name";
-  constexpr char yaml_value[] = "true";
-  rcutils_allocator_t allocator = rcutils_get_default_allocator();
-
-  rcl_params_t * params_st = rcl_yaml_node_struct_init(allocator);
-  ASSERT_NE(params_st, nullptr);
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    rcl_yaml_node_struct_fini(params_st);
-  });
-  auto mock = mocking_utils::patch(
-    "lib:rcl_yaml_param_parser", yaml_parser_parse, [](yaml_parser_t *, yaml_event_t * event) {
-      event->start_mark.line = 0u;
-      event->type = YAML_NO_EVENT;
-      return 1;
-    });
-  EXPECT_FALSE(rcl_parse_yaml_value(node_name, param_name, yaml_value, params_st));
 }

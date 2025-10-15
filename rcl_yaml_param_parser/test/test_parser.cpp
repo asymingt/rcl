@@ -30,8 +30,23 @@
 #include "rcutils/types/rcutils_ret.h"
 #include "rcutils/types/string_array.h"
 
-#include "./mocking_utils/patch.hpp"
 #include "./time_bomb_allocator_testing_utils.h"
+
+#include "rules_cc/cc/runfiles/runfiles.h"
+
+using rules_cc::cc::runfiles::Runfiles;
+
+std::optional<std::string> get_test_asset_path(const std::string & filename) {
+  const std::string test_workspace =
+    strcmp(BAZEL_CURRENT_REPOSITORY, "") == 0 ? "_main" : BAZEL_CURRENT_REPOSITORY;
+  std::string error;
+  std::unique_ptr<Runfiles> runfiles(
+    Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error));
+  if (!runfiles) {
+    return std::nullopt;
+  }
+  return runfiles->Rlocation(test_workspace + "/test/" + filename);
+}
 
 TEST(RclYamlParamParser, node_init_fini) {
   rcutils_allocator_t allocator = rcutils_get_default_allocator();
@@ -398,16 +413,7 @@ TEST(RclYamlParamParser, test_yaml_node_struct_print) {
 }
 
 TEST(RclYamlParamParser, test_parse_file_with_bad_allocator) {
-  char cur_dir[1024];
   rcutils_reset_error();
-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
-  rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  char * test_path = rcutils_join_path(cur_dir, "test", allocator);
-  ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    allocator.deallocate(test_path, allocator.state);
-  });
 
   const std::vector<std::string> filenames = {
     "correct_config.yaml",
@@ -426,14 +432,10 @@ TEST(RclYamlParamParser, test_parse_file_with_bad_allocator) {
 
   for (auto & filename : filenames) {
     SCOPED_TRACE(filename);
-    char * path = rcutils_join_path(test_path, filename.c_str(), allocator);
-    ASSERT_TRUE(NULL != path) << rcutils_get_error_string().str;
-    OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-    {
-      allocator.deallocate(path, allocator.state);
-    });
-    ASSERT_TRUE(rcutils_exists(path)) << "No test YAML file found at " << path;
 
+    std::optional<std::string> path = get_test_asset_path(filename);
+    ASSERT_NE(std::nullopt, path);
+    
     RCUTILS_FAULT_INJECTION_TEST(
     {
       rcutils_allocator_t allocator = rcutils_get_default_allocator();
@@ -443,7 +445,7 @@ TEST(RclYamlParamParser, test_parse_file_with_bad_allocator) {
         continue;
       }
 
-      bool res = rcl_parse_yaml_file(path, params_hdl);
+      bool res = rcl_parse_yaml_file(path->c_str(), params_hdl);
       // Not verifying res is true or false here, because eventually it will come back with an ok
       // result. We're just trying to make sure that bad allocations are properly handled
       (void)res;
@@ -457,53 +459,4 @@ TEST(RclYamlParamParser, test_parse_file_with_bad_allocator) {
       params_hdl = NULL;
     });
   }
-}
-
-TEST(RclYamlParamParser, test_parse_yaml_initialize_mock) {
-  char cur_dir[1024];
-  rcutils_reset_error();
-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
-
-  rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  char * test_path = rcutils_join_path(cur_dir, "test", allocator);
-
-  char * path = rcutils_join_path(test_path, "correct_config.yaml", allocator);
-  ASSERT_TRUE(NULL != path) << rcutils_get_error_string().str;
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    allocator.deallocate(test_path, allocator.state);
-    allocator.deallocate(path, allocator.state);
-  });
-
-  rcl_params_t * params_hdl = rcl_yaml_node_struct_init(allocator);
-  ASSERT_NE(nullptr, params_hdl);
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    rcl_yaml_node_struct_fini(params_hdl);
-  });
-  auto mock = mocking_utils::patch_and_return(
-    "lib:rcl_yaml_param_parser", yaml_parser_initialize, false);
-
-  EXPECT_FALSE(rcl_parse_yaml_file(path, params_hdl));
-  rcutils_reset_error();
-
-  constexpr char node_name[] = "node name";
-  constexpr char param_name[] = "param name";
-  constexpr char yaml_value[] = "true";
-
-  rcl_params_t * params_st = rcl_yaml_node_struct_init(allocator);
-  ASSERT_NE(params_st, nullptr);
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    rcl_yaml_node_struct_fini(params_st);
-  });
-  EXPECT_FALSE(rcl_parse_yaml_value(node_name, param_name, yaml_value, params_st));
-  rcutils_reset_error();
-}
-
-
-int32_t main(int32_t argc, char ** argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

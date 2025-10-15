@@ -25,34 +25,36 @@
 #include "rcutils/filesystem.h"
 #include "rcutils/testing/fault_injection.h"
 
-#include "./mocking_utils/patch.hpp"
+#include "rules_cc/cc/runfiles/runfiles.h"
 
-static char cur_dir[1024];
+using rules_cc::cc::runfiles::Runfiles;
+
+std::optional<std::string> get_test_asset_path(const std::string & filename) {
+  const std::string test_workspace =
+    strcmp(BAZEL_CURRENT_REPOSITORY, "") == 0 ? "_main" : BAZEL_CURRENT_REPOSITORY;
+  std::string error;
+  std::unique_ptr<Runfiles> runfiles(
+    Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error));
+  if (!runfiles) {
+    return std::nullopt;
+  }
+  return runfiles->Rlocation(test_workspace + "/test/" + filename);
+}
 
 TEST(RclYamlParamParserMultipleNodes, multiple_number_nodes) {
   rcutils_reset_error();
-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
   rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  char * test_path = rcutils_join_path(cur_dir, "test", allocator);
-  ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    allocator.deallocate(test_path, allocator.state);
-  });
-  char * path = rcutils_join_path(test_path, "multiple_nodes.yaml", allocator);
-  ASSERT_TRUE(NULL != path) << rcutils_get_error_string().str;
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    allocator.deallocate(path, allocator.state);
-  });
-  ASSERT_TRUE(rcutils_exists(path)) << "No test YAML file found at " << path;
+
+  std::optional<std::string> path = get_test_asset_path("multiple_nodes.yaml");
+  ASSERT_NE(std::nullopt, path);
+
   rcl_params_t * params_hdl = rcl_yaml_node_struct_init(allocator);
   ASSERT_TRUE(NULL != params_hdl) << rcutils_get_error_string().str;
   OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
   {
     rcl_yaml_node_struct_fini(params_hdl);
   });
-  ASSERT_TRUE(rcl_parse_yaml_file(path, params_hdl));
+  ASSERT_TRUE(rcl_parse_yaml_file(path->c_str(), params_hdl));
   ASSERT_EQ(513u, params_hdl->num_nodes);
   for (size_t i = 0; i < params_hdl->num_nodes; ++i) {
     EXPECT_EQ("foo_ns/foo_name" + std::to_string(i + 1), params_hdl->node_names[i]);
@@ -67,27 +69,12 @@ TEST(RclYamlParamParserMultipleNodes, multiple_number_nodes) {
 }
 
 TEST(RclYamlParamParserMultipleNodes, test_multiple_nodes_with_bad_allocator) {
-  char cur_dir[1024];
   rcutils_reset_error();
-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
   rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  char * test_path = rcutils_join_path(cur_dir, "test", allocator);
-  ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    allocator.deallocate(test_path, allocator.state);
-  });
 
-  std::string filename = "multiple_nodes.yaml";
-  SCOPED_TRACE(filename);
-  char * path = rcutils_join_path(test_path, filename.c_str(), allocator);
-  ASSERT_TRUE(NULL != path) << rcutils_get_error_string().str;
-  OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(
-  {
-    allocator.deallocate(path, allocator.state);
-  });
-  ASSERT_TRUE(rcutils_exists(path)) << "No test YAML file found at " << path;
-
+  std::optional<std::string> path = get_test_asset_path("multiple_nodes.yaml");
+  ASSERT_NE(std::nullopt, path);
+  
   RCUTILS_FAULT_INJECTION_TEST(
   {
     rcutils_allocator_t allocator = rcutils_get_default_allocator();
@@ -97,7 +84,7 @@ TEST(RclYamlParamParserMultipleNodes, test_multiple_nodes_with_bad_allocator) {
       continue;
     }
 
-    bool res = rcl_parse_yaml_file(path, params_hdl);
+    bool res = rcl_parse_yaml_file(path->c_str(), params_hdl);
     // Not verifying res is true or false here, because eventually it will come back with an ok
     // result. We're just trying to make sure that bad allocations are properly handled
     (void)res;

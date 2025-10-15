@@ -76,6 +76,7 @@ cc_library(
             "@mimick",
             "@osrf_testing_tools_cpp//:memory_tools",
             "@rcutils",
+            "@rules_cc//cc/runfiles",
             ":rcl_yaml_param_parser",
         ],
     )
@@ -83,8 +84,10 @@ cc_library(
         "test_namespace",
         "test_node_params",
         "test_parse",
+        "test_parse_mock",
         "test_parse_yaml",
         "test_parser",
+        "test_parser_mock",
         "test_parser_multiple_nodes",
         "test_parser_multiple_params",
         "test_yaml_variant",
