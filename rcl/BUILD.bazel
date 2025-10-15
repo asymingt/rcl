@@ -72,17 +72,6 @@ cc_library(
 
 # Tests
 
-c_ros_library(
-    name = "test_msgs",
-    deps = [
-        "@test_msgs//msg:Arrays",
-        "@test_msgs//msg:Constants",
-        "@test_msgs//msg:BasicTypes",
-        "@test_msgs//msg:Strings",
-        "@test_msgs//srv:BasicTypes",
-    ],
-)
-
 [
     cc_test(
         name = test,
@@ -104,8 +93,8 @@ c_ros_library(
             "@osrf_testing_tools_cpp//:memory_tools",
             "@mimick",
             "@rules_cc//cc/runfiles",
+            "@test_msgs//:msgs_c",
             ":rcl",
-            ":test_msgs"
         ],
     )
     for test in [
