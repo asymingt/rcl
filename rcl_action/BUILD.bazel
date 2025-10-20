@@ -74,7 +74,9 @@ c_ros_library(
             ":test_msgs",
         ],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_action\\\""],
-    ) for name in [
+        timeout = "moderate",
+    )
+    for name in [
         "test_action_client",
         "test_action_communication",
         "test_action_interaction",
