@@ -264,7 +264,7 @@ TEST_F(TestGetSecureRoot, test_get_security_options) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestGetSecureRoot, DISABLED_test_rcl_security_enabled) {
+TEST_F(TestGetSecureRoot, test_rcl_security_enabled) {
   EXPECT_EQ(RCL_RET_INVALID_ARGUMENT, rcl_security_enabled(nullptr));
   rcl_reset_error();
 
@@ -308,7 +308,7 @@ TEST_F(TestGetSecureRoot, DISABLED_test_rcl_security_enabled) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestGetSecureRoot, DISABLED_test_rcl_get_enforcement_policy) {
+TEST_F(TestGetSecureRoot, test_rcl_get_enforcement_policy) {
   EXPECT_EQ(RCL_RET_INVALID_ARGUMENT, rcl_get_enforcement_policy(nullptr));
   rcl_reset_error();
 
@@ -352,7 +352,7 @@ TEST_F(TestGetSecureRoot, DISABLED_test_rcl_get_enforcement_policy) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestGetSecureRoot, DISABLED_test_rcl_get_secure_root_with_bad_arguments) {
+TEST_F(TestGetSecureRoot, test_rcl_get_secure_root_with_bad_arguments) {
   rcl_allocator_t allocator = rcl_get_default_allocator();
   EXPECT_EQ(nullptr, rcl_get_secure_root(nullptr, &allocator));
   EXPECT_TRUE(rcl_error_is_set());
@@ -369,7 +369,7 @@ TEST_F(TestGetSecureRoot, DISABLED_test_rcl_get_secure_root_with_bad_arguments) 
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestGetSecureRoot, DISABLED_test_rcl_get_secure_root_with_internal_errors) {
+TEST_F(TestGetSecureRoot, test_rcl_get_secure_root_with_internal_errors) {
   rcl_allocator_t allocator = rcl_get_default_allocator();
   rcl_allocator_t failing_allocator = get_time_bombed_allocator();
 

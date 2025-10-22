@@ -29,7 +29,7 @@
 #include "../mocking_utils/patch.hpp"
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST(TestValidateEnclaveName, DISABLED_test_validate) {
+TEST(TestValidateEnclaveName, test_validate) {
   int validation_result;
   size_t invalid_index;
 
@@ -79,7 +79,7 @@ TEST(TestValidateEnclaveName, DISABLED_test_validate) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST(TestValidateEnclaveName, DISABLED_test_validate_on_internal_error) {
+TEST(TestValidateEnclaveName, test_validate_on_internal_error) {
   int validation_result;
   size_t invalid_index;
 

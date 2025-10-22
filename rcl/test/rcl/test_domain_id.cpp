@@ -55,7 +55,7 @@ TEST(TestGetDomainId, test_nominal) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST(TestGetDomainId, DISABLED_test_mock_get_default_domain_id) {
+TEST(TestGetDomainId, test_mock_get_default_domain_id) {
   auto mock = mocking_utils::patch_and_return(
     "lib:rcl", rcutils_get_env, "argument env_name is null");
   size_t domain_id = RCL_DEFAULT_DOMAIN_ID;

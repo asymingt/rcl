@@ -135,7 +135,7 @@ TEST_F(TestServiceEventPublisherFixture, test_service_event_publisher_nominal)
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestServiceEventPublisherFixture, DISABLED_test_service_event_publisher_init_and_fini)
+TEST_F(TestServiceEventPublisherFixture, test_service_event_publisher_init_and_fini)
 {
   rcl_service_event_publisher_t service_event_publisher =
     rcl_get_zero_initialized_service_event_publisher();

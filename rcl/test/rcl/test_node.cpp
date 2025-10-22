@@ -422,7 +422,7 @@ TEST_F(TestNodeFixture, test_rcl_node_life_cycle) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestNodeFixture, DISABLED_test_rcl_node_init_with_internal_errors) {
+TEST_F(TestNodeFixture, test_rcl_node_init_with_internal_errors) {
   // We always call rcutils_logging_shutdown(), even if we didn't explicitly
   // initialize it.  That's because some internals of rcl may implicitly
   // initialize it, so we have to do this not to leak memory.  It doesn't
@@ -1016,7 +1016,7 @@ TEST_F(TestNodeFixture, test_rcl_node_resolve_name) {
 /* Tests special case node_options
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestNodeFixture, DISABLED_test_rcl_get_disable_loaned_message) {
+TEST_F(TestNodeFixture, test_rcl_get_disable_loaned_message) {
   {
     EXPECT_EQ(RCL_RET_INVALID_ARGUMENT, rcl_get_disable_loaned_message(nullptr));
     rcl_reset_error();

@@ -152,7 +152,7 @@ MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rcutils_allocator_t, >)
 
 // Bad arguments for init and fini
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixture, DISABLED_test_subscription_bad_init) {
+TEST_F(TestSubscriptionFixture, test_subscription_bad_init) {
   const rosidl_message_type_support_t * ts =
     ROSIDL_GET_MSG_TYPE_SUPPORT(test_msgs, msg, BasicTypes);
   constexpr char topic[] = "/chatter";
@@ -269,7 +269,7 @@ TEST_F(TestSubscriptionFixture, DISABLED_test_subscription_bad_init) {
 //   Actual: false
 // Expected: true
 // 1760982578819988272 > 1760982578819988000
-TEST_F(TestSubscriptionFixture, DISABLED_test_subscription_nominal) {
+TEST_F(TestSubscriptionFixture, test_subscription_nominal) {
   rcl_ret_t ret;
   rcl_publisher_t publisher = rcl_get_zero_initialized_publisher();
   const rosidl_message_type_support_t * ts =
@@ -633,7 +633,7 @@ TEST_F(TestSubscriptionFixture, test_subscription_serialized) {
 /* Basic test for subscription loan functions
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixture, DISABLED_test_subscription_loaned) {
+TEST_F(TestSubscriptionFixture, test_subscription_loaned) {
   rcl_ret_t ret;
   rcl_publisher_t publisher = rcl_get_zero_initialized_publisher();
   const rosidl_message_type_support_t * ts =
@@ -785,7 +785,7 @@ TEST_F(TestSubscriptionFixture, test_subscription_loan_disable) {
 /* Test for all failure modes in subscription take with loaned messages function.
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixture, DISABLED_test_bad_take_loaned_message) {
+TEST_F(TestSubscriptionFixture, test_bad_take_loaned_message) {
   constexpr char topic[] = "rcl_loan";
   const rosidl_message_type_support_t * ts = ROSIDL_GET_MSG_TYPE_SUPPORT(test_msgs, msg, Strings);
   rcl_subscription_options_t subscription_options = rcl_subscription_get_default_options();
@@ -859,7 +859,7 @@ TEST_F(TestSubscriptionFixture, DISABLED_test_bad_take_loaned_message) {
 /* Test for all failure modes in subscription return loaned messages function.
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixture, DISABLED_test_bad_return_loaned_message) {
+TEST_F(TestSubscriptionFixture, test_bad_return_loaned_message) {
   constexpr char topic[] = "rcl_loan";
   const rosidl_message_type_support_t * ts = ROSIDL_GET_MSG_TYPE_SUPPORT(test_msgs, msg, Strings);
   rcl_subscription_options_t subscription_options = rcl_subscription_get_default_options();
@@ -1371,7 +1371,7 @@ TEST_F(TestSubscriptionFixture, test_get_options) {
 /* bad take()
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixtureInit, DISABLED_test_subscription_bad_take) {
+TEST_F(TestSubscriptionFixtureInit, test_subscription_bad_take) {
   test_msgs__msg__BasicTypes msg;
   rmw_message_info_t message_info = rmw_get_zero_initialized_message_info();
   ASSERT_TRUE(test_msgs__msg__BasicTypes__init(&msg));
@@ -1555,7 +1555,7 @@ TEST_F(TestSubscriptionFixture, test_subscription_option_ignore_local_publicatio
 /* bad take_serialized
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixtureInit, DISABLED_test_subscription_bad_take_serialized) {
+TEST_F(TestSubscriptionFixtureInit, test_subscription_bad_take_serialized) {
   rcl_serialized_message_t serialized_msg = rmw_get_zero_initialized_serialized_message();
   size_t initial_serialization_capacity = 0u;
   ASSERT_EQ(
@@ -1610,7 +1610,7 @@ TEST_F(TestSubscriptionFixtureInit, DISABLED_test_subscription_bad_take_serializ
 /* Bad arguments take_sequence
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixtureInit, DISABLED_test_subscription_bad_take_sequence)
+TEST_F(TestSubscriptionFixtureInit, test_subscription_bad_take_sequence)
 {
   size_t seq_size = 3u;
   rmw_message_sequence_t messages;
@@ -1692,7 +1692,7 @@ TEST_F(TestSubscriptionFixtureInit, DISABLED_test_subscription_bad_take_sequence
 /* Test for all failure modes in subscription get_publisher_count function.
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixtureInit, DISABLED_test_bad_get_publisher_count) {
+TEST_F(TestSubscriptionFixtureInit, test_bad_get_publisher_count) {
   size_t publisher_count = 0;
   EXPECT_EQ(
     RCL_RET_SUBSCRIPTION_INVALID,
@@ -1750,7 +1750,7 @@ TEST_F(TestSubscriptionFixtureInit, test_subscription_bad_argument) {
 /* Test for all failure modes in rcl_subscription_set_content_filter function.
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixtureInit, DISABLED_test_bad_rcl_subscription_set_content_filter) {
+TEST_F(TestSubscriptionFixtureInit, test_bad_rcl_subscription_set_content_filter) {
   EXPECT_EQ(
     RCL_RET_SUBSCRIPTION_INVALID,
     rcl_subscription_set_content_filter(nullptr, nullptr));
@@ -1811,7 +1811,7 @@ TEST_F(TestSubscriptionFixtureInit, DISABLED_test_bad_rcl_subscription_set_conte
 /* Test for all failure modes in rcl_subscription_get_content_filter function.
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestSubscriptionFixtureInit, DISABLED_test_bad_rcl_subscription_get_content_filter) {
+TEST_F(TestSubscriptionFixtureInit, test_bad_rcl_subscription_get_content_filter) {
   EXPECT_EQ(
     RCL_RET_SUBSCRIPTION_INVALID,
     rcl_subscription_get_content_filter(nullptr, nullptr));

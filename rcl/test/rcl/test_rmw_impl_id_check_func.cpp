@@ -82,7 +82,7 @@ MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rcutils_allocator_t, >)
 MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rcutils_allocator_t, !=)
 
 // Mock internal calls to external libraries to fail
-// TODO(asymingt) enable once mocking works in Bazel.
+// TODO(asymingt) re-enable when we decide how to handle a RMW_IMPLEMENTATION environent variable.
 TEST(TestRmwCheck, DISABLED_test_mock_rmw_impl_check) {
   {
     // Fail reading RMW_IMPLEMENTATION_ENV_VAR_NAME

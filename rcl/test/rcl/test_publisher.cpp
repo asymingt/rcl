@@ -616,7 +616,7 @@ TEST_F(TestPublisherFixture, test_invalid_publisher) {
 // Mocking rmw_publisher_count_matched_subscriptions to make
 // rcl_publisher_get_subscription_count fail
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixtureInit, DISABLED_test_mock_publisher_get_subscription_count)
+TEST_F(TestPublisherFixtureInit, test_mock_publisher_get_subscription_count)
 {
   auto mock = mocking_utils::patch_and_return(
     "lib:rcl", rmw_publisher_count_matched_subscriptions, RMW_RET_BAD_ALLOC);
@@ -633,7 +633,7 @@ TEST_F(TestPublisherFixtureInit, DISABLED_test_mock_publisher_get_subscription_c
 // Mocking rmw_publisher_assert_liveliness to make
 // rcl_publisher_assert_liveliness fail
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixtureInit, DISABLED_test_mock_assert_liveliness) {
+TEST_F(TestPublisherFixtureInit, test_mock_assert_liveliness) {
   auto mock = mocking_utils::patch_and_return(
     "lib:rcl", rmw_publisher_assert_liveliness, RMW_RET_ERROR);
 
@@ -653,7 +653,7 @@ MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rmw_time_t, <)
 MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rmw_time_t, >)
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixtureInit, DISABLED_test_mock_assert_wait_for_all_acked)
+TEST_F(TestPublisherFixtureInit, test_mock_assert_wait_for_all_acked)
 {
   rcl_ret_t ret;
   rmw_ret_t rmw_publisher_wait_for_all_acked_return;
@@ -713,7 +713,7 @@ TEST_F(TestPublisherFixtureInit, DISABLED_test_mock_assert_wait_for_all_acked)
 
 // Mocking rmw_publish to make rcl_publish fail
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixtureInit, DISABLED_test_mock_publish) {
+TEST_F(TestPublisherFixtureInit, test_mock_publish) {
   auto mock = mocking_utils::patch_and_return("lib:rcl", rmw_publish, RMW_RET_ERROR);
 
   // Test normal usage of the function rcl_publish returning unexpected RMW_RET_ERROR
@@ -729,7 +729,7 @@ TEST_F(TestPublisherFixtureInit, DISABLED_test_mock_publish) {
 
 // Mocking rmw_publish_serialized_message to make rcl_publish_serialized_message fail
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixtureInit, DISABLED_test_mock_publish_serialized_message)
+TEST_F(TestPublisherFixtureInit, test_mock_publish_serialized_message)
 {
   rcl_serialized_message_t serialized_msg = rmw_get_zero_initialized_serialized_message();
   size_t initial_size_serialized = 0u;
@@ -781,7 +781,7 @@ MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rcutils_allocator_t, >)
 MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rcutils_allocator_t, !=)
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixture, DISABLED_test_mock_publisher_init) {
+TEST_F(TestPublisherFixture, test_mock_publisher_init) {
   rcl_publisher_t publisher = rcl_get_zero_initialized_publisher();
   const rosidl_message_type_support_t * ts =
     ROSIDL_GET_MSG_TYPE_SUPPORT(test_msgs, msg, Strings);
@@ -797,7 +797,7 @@ TEST_F(TestPublisherFixture, DISABLED_test_mock_publisher_init) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixture, DISABLED_test_mock_publisher_init_fail_qos)
+TEST_F(TestPublisherFixture, test_mock_publisher_init_fail_qos)
 {
   auto mock = mocking_utils::patch_and_return(
     "lib:rcl", rmw_publisher_get_actual_qos, RMW_RET_ERROR);
@@ -816,7 +816,7 @@ TEST_F(TestPublisherFixture, DISABLED_test_mock_publisher_init_fail_qos)
 
 // Tests for loaned msgs functions. Mocked as the rmw tier1 vendors don't support it
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixture, DISABLED_test_mock_loaned_functions) {
+TEST_F(TestPublisherFixture, test_mock_loaned_functions) {
   rcl_publisher_t publisher = rcl_get_zero_initialized_publisher();
   rcl_publisher_t not_init_publisher = rcl_get_zero_initialized_publisher();
   const rosidl_message_type_support_t * ts =
@@ -909,7 +909,7 @@ TEST_F(TestPublisherFixture, DISABLED_test_mock_loaned_functions) {
 
 // Tests mocking ini/fini functions for specific failures
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixture, DISABLED_test_mocks_fail_publisher_init) {
+TEST_F(TestPublisherFixture, test_mocks_fail_publisher_init) {
   rcl_publisher_t publisher = rcl_get_zero_initialized_publisher();
   const rosidl_message_type_support_t * ts =
     ROSIDL_GET_MSG_TYPE_SUPPORT(test_msgs, msg, Strings);
@@ -963,7 +963,7 @@ TEST_F(TestPublisherFixture, DISABLED_test_mocks_fail_publisher_init) {
 
 // Test mocked fail fini publisher
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestPublisherFixture, DISABLED_test_mock_publisher_fini_fail) {
+TEST_F(TestPublisherFixture, test_mock_publisher_fini_fail) {
   rcl_publisher_t publisher = rcl_get_zero_initialized_publisher();
   const rosidl_message_type_support_t * ts =
     ROSIDL_GET_MSG_TYPE_SUPPORT(test_msgs, msg, BasicTypes);

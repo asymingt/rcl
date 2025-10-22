@@ -460,8 +460,7 @@ TEST(TestParse, parse_key_bad_args)
   rcutils_reset_error();
 }
 
-// TODO(asymingt) enable once mocking works in Bazel.
-TEST(TestParse, DISABLED_parse_file_events_mock_yaml_parser_parse) {
+TEST(TestParse, parse_file_events_mock_yaml_parser_parse) {
   char cur_dir[1024];
   rcutils_reset_error();
   EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
@@ -510,8 +509,7 @@ TEST(TestParse, DISABLED_parse_file_events_mock_yaml_parser_parse) {
   EXPECT_EQ(RCUTILS_RET_ERROR, parse_file_events(&parser, &ns_tracker, params_hdl));
 }
 
-// TODO(asymingt) enable once mocking works in Bazel.
-TEST(TestParse, DISABLED_parse_value_events_mock_yaml_parser_parse) {
+TEST(TestParse, parse_value_events_mock_yaml_parser_parse) {
   constexpr char node_name[] = "node name";
   constexpr char param_name[] = "param name";
   constexpr char yaml_value[] = "true";

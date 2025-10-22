@@ -135,7 +135,7 @@ TEST(TestLogging, test_logging_rosout_enabled) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST(TestLogging, DISABLED_test_failing_external_logging_configure) {
+TEST(TestLogging, test_failing_external_logging_configure) {
   const char * ext_lib_flag = "--enable-" RCL_LOG_EXT_LIB_FLAG_SUFFIX;
   const char * argv[] = {"test_logging", RCL_ROS_ARGS_FLAG, ext_lib_flag};
   const int argc = sizeof(argv) / sizeof(argv[0]);
@@ -170,7 +170,7 @@ TEST(TestLogging, DISABLED_test_failing_external_logging_configure) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST(TestLogging, DISABLED_test_failing_logger_level_configure) {
+TEST(TestLogging, test_failing_logger_level_configure) {
   const char * argv[] = {
     "test_logging", RCL_ROS_ARGS_FLAG,
     RCL_LOG_LEVEL_FLAG, ROS_PACKAGE_NAME ":=info"};
@@ -196,7 +196,7 @@ TEST(TestLogging, DISABLED_test_failing_logger_level_configure) {
 }
 
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST(TestLogging, DISABLED_test_failing_external_logging) {
+TEST(TestLogging, test_failing_external_logging) {
   const char * stdout_flag = "--disable-" RCL_LOG_STDOUT_FLAG_SUFFIX;
   const char * ext_flag = "--enable-" RCL_LOG_EXT_LIB_FLAG_SUFFIX;
   const char * package_name = ROS_PACKAGE_NAME ":=DEBUG";

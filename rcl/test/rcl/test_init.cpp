@@ -315,7 +315,7 @@ TEST_F(TestRCLFixture, test_rcl_init_and_shutdown) {
 /* Tests rcl_init() deals with internal errors correctly.
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestRCLFixture, DISABLED_test_rcl_init_internal_error) {
+TEST_F(TestRCLFixture, test_rcl_init_internal_error) {
   rcl_init_options_t init_options = rcl_get_zero_initialized_init_options();
   rcl_ret_t ret = rcl_init_options_init(&init_options, rcl_get_default_allocator());
   ASSERT_EQ(RCL_RET_OK, ret) << rcl_get_error_string().str;
@@ -359,7 +359,7 @@ TEST_F(TestRCLFixture, DISABLED_test_rcl_init_internal_error) {
 /* Tests rcl_shutdown() deals with internal errors correctly.
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestRCLFixture, DISABLED_test_rcl_shutdown_internal_error) {
+TEST_F(TestRCLFixture, test_rcl_shutdown_internal_error) {
   rcl_init_options_t init_options = rcl_get_zero_initialized_init_options();
   rcl_ret_t ret = rcl_init_options_init(&init_options, rcl_get_default_allocator());
   ASSERT_EQ(RCL_RET_OK, ret) << rcl_get_error_string().str;
@@ -531,7 +531,7 @@ MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rcutils_allocator_t, !=)
 
 // Tests rcl_init_options_init() mocked to fail
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestRCLFixture, DISABLED_test_mocked_rcl_init_options_ini) {
+TEST_F(TestRCLFixture, test_mocked_rcl_init_options_ini) {
   rcl_init_options_t init_options = rcl_get_zero_initialized_init_options();
   auto mock = mocking_utils::patch_and_return("lib:rcl", rmw_init_options_init, RMW_RET_ERROR);
   EXPECT_EQ(RCL_RET_ERROR, rcl_init_options_init(&init_options, rcl_get_default_allocator()));
@@ -540,7 +540,7 @@ TEST_F(TestRCLFixture, DISABLED_test_mocked_rcl_init_options_ini) {
 
 // Tests rcl_init_options_fini() mocked to fail
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestRCLFixture, DISABLED_test_mocked_rcl_init_options_fini) {
+TEST_F(TestRCLFixture, test_mocked_rcl_init_options_fini) {
   rcl_init_options_t init_options = rcl_get_zero_initialized_init_options();
   rcl_ret_t ret = rcl_init_options_init(&init_options, rcl_get_default_allocator());
   ASSERT_EQ(RCL_RET_OK, ret) << rcl_get_error_string().str;
@@ -553,7 +553,7 @@ TEST_F(TestRCLFixture, DISABLED_test_mocked_rcl_init_options_fini) {
 
 // Mock rcl_init_options_copy to fail
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestRCLFixture, DISABLED_test_rcl_init_options_copy_fail_rmw_copy) {
+TEST_F(TestRCLFixture, test_rcl_init_options_copy_fail_rmw_copy) {
   rcl_init_options_t init_options = rcl_get_zero_initialized_init_options();
   rcl_ret_t ret = rcl_init_options_init(&init_options, rcl_get_default_allocator());
   ASSERT_EQ(RCL_RET_OK, ret) << rcl_get_error_string().str;

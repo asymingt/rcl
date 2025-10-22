@@ -463,7 +463,7 @@ MOCKING_UTILS_BOOL_OPERATOR_RETURNS_FALSE(rcutils_allocator_t, !=)
 /* Test failed service initialization using mocks
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestServiceFixture, DISABLED_test_fail_ini_mocked) {
+TEST_F(TestServiceFixture, test_fail_ini_mocked) {
   const rosidl_service_type_support_t * ts = ROSIDL_GET_SRV_TYPE_SUPPORT(
     test_msgs, srv, BasicTypes);
   constexpr char topic[] = "topic";
@@ -528,7 +528,7 @@ TEST_F(TestServiceFixture, DISABLED_test_fail_ini_mocked) {
 /* Test failed service finalization using mocks
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestServiceFixture, DISABLED_test_fail_fini_mocked) {
+TEST_F(TestServiceFixture, test_fail_fini_mocked) {
   const rosidl_service_type_support_t * ts = ROSIDL_GET_SRV_TYPE_SUPPORT(
     test_msgs, srv, BasicTypes);
   constexpr char topic[] = "primitives";
@@ -553,7 +553,7 @@ TEST_F(TestServiceFixture, DISABLED_test_fail_fini_mocked) {
 /* Test failed service take_request_with_info using mocks and nullptrs
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestServiceFixture, DISABLED_test_fail_take_request_with_info) {
+TEST_F(TestServiceFixture, test_fail_take_request_with_info) {
   const rosidl_service_type_support_t * ts = ROSIDL_GET_SRV_TYPE_SUPPORT(
     test_msgs, srv, BasicTypes);
   constexpr char topic[] = "primitives";
@@ -622,7 +622,7 @@ TEST_F(TestServiceFixture, DISABLED_test_fail_take_request_with_info) {
 /* Test failed service send_response using mocks and nullptrs
  */
 // TODO(asymingt) enable once mocking works in Bazel.
-TEST_F(TestServiceFixture, DISABLED_test_fail_send_response) {
+TEST_F(TestServiceFixture, test_fail_send_response) {
   const rosidl_service_type_support_t * ts = ROSIDL_GET_SRV_TYPE_SUPPORT(
     test_msgs, srv, BasicTypes);
   constexpr char topic[] = "primitives";

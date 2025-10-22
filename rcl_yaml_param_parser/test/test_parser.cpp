@@ -460,8 +460,7 @@ TEST(RclYamlParamParser, test_parse_file_with_bad_allocator) {
   }
 }
 
-// TODO(asymingt) enable once mocking works in Bazel.
-TEST(RclYamlParamParser, DISABLED_test_parse_yaml_initialize_mock) {
+TEST(RclYamlParamParser, test_parse_yaml_initialize_mock) {
   char cur_dir[1024];
   rcutils_reset_error();
   EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
