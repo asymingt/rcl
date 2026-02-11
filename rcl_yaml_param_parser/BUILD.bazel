@@ -103,7 +103,6 @@ cc_library(
             ":rcl_yaml_param_parser_mock",
         ],
         timeout = "moderate",
-        tags = ["exclusive"],
     )
     for test in [
         "benchmark_parse_yaml",

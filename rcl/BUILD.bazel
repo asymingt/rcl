@@ -137,8 +137,6 @@ cc_library(
             ":wait_for_entity_helpers",
         ],
         timeout = "moderate",
-        tags = ["exclusive"] if test in ["test_subscription"] else []
-
     )
     for test in [
         "test_arguments",
