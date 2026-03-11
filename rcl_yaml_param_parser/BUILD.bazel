@@ -14,7 +14,7 @@
 
 # Imports
 
-load("@rules_cc//cc:defs.bzl", "cc_import", "cc_library", "cc_shared_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -93,6 +93,7 @@ cc_library(
         srcs = glob(["src/**/*.h"]) + ["test/benchmark/" + test + ".cpp"],
         data = ["test/benchmark/benchmark_params.yaml"],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_yaml_param_parser\\\""],
+        tags = ["manual"],
         deps = [
             ":rcl_yaml_param_parser_mock",
             "@google_benchmark//:benchmark",
